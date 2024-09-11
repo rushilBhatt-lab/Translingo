@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Transcription from "../Transcription/Transcription";
 import Translation from "../Translation/Translation";
+import cn from "classnames";
 
 const Information = () => {
 	const [tab, setTab] = useState("transcription");
@@ -10,19 +11,19 @@ const Information = () => {
 			<h1 className="font-semibold text-4xl sm:text-5xl md:text-6xl whitespace-nowrap">Your Transcription</h1>
 			<div className="grid grid-cols-2 items-center mx-auto bg-white  shadow rounded-full overflow-hidden">
 				<button
-					className={
-						"px-4 duration-200 py-1 font-medium " +
-						(tab === "transcription" ? "bg-blue-400 text-white" : "text-blue-400 hover:text-blue-600")
-					}
+					className={cn("px-4 duration-200 py-1 font-medium", {
+						"bg-blue-400 text-white": tab === "transcription",
+						"text-blue-400 hover:text-blue-600": tab !== "transcription",
+					})}
 					onClick={() => setTab("transcription")}
 				>
 					Transcription
 				</button>
 				<button
-					className={
-						"px-4  duration-200 py-1 font-medium " +
-						(tab === "translation" ? "bg-blue-400 text-white" : "text-blue-400 hover:text-blue-600")
-					}
+					className={cn("px-4 duration-200 py-1 font-medium", {
+						"bg-blue-400 text-white": tab === "translation",
+						"text-blue-400 hover:text-blue-600": tab !== "translation",
+					})}
 					onClick={() => setTab("translation")}
 				>
 					Translation

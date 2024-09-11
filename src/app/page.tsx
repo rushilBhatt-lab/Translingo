@@ -9,7 +9,7 @@ import Information from "./components/Information/Information";
 export default function Home() {
 	const [file, setFile] = useState<File | null>(null);
 	const [audioStream, setAudioStream] = useState<MediaStream | File | null>(null);
-	const [output, setOutput] = useState<boolean>(false);
+	const [output, setOutput] = useState<boolean>(true);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const isAudioAvailable = file || audioStream;
