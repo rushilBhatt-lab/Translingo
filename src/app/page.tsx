@@ -19,6 +19,8 @@ export default function Home() {
 		setAudioStream(null);
 	};
 
+	console.log(output);
+
 	useEffect(() => {
 		console.log(audioStream);
 	}, [audioStream]);
