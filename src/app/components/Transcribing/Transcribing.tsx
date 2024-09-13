@@ -1,7 +1,7 @@
 import React from "react";
 
 interface props {
-	downloading: any;
+	downloading?: any;
 }
 const Transcribing = ({ downloading }: props) => {
 	return (

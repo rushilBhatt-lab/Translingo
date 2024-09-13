@@ -6,6 +6,7 @@ interface props {
 	file: File | null;
 	audioStream: MediaStream | File | null;
 	handleAudioReset: () => void;
+	handleFormSubmission: () => void;
 }
 
 const FileDisplay = ({ file, audioStream, handleAudioReset }: props) => {
