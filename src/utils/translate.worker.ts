@@ -1,4 +1,4 @@
-import { ProgressCallbackData, TranslationMessageEvent } from "@/interface/interface";
+import { Beam, ProgressCallbackData, TranslationMessageEvent } from "@/interface/interface";
 import { pipeline, PipelineType } from "@xenova/transformers";
 
 class MyTranslationPipeline {
@@ -23,7 +23,7 @@ self.addEventListener("message", async (event: MessageEvent<TranslationMessageEv
 	const output = await translator(data.text, {
 		tgt_lang: data.tgt_lang,
 		src_lang: data.src_lang,
-		callback_function: (beams: any[]) => {
+		callback_function: (beams: Beam[]) => {
 			self.postMessage({
 				status: "update",
 				output: translator.tokenizer.decode(beams[0].output_token_ids, {

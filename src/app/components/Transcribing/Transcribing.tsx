@@ -1,7 +1,8 @@
 import React from "react";
+import Loader from "../Loader/Loader";
 
 interface props {
-	downloading?: any;
+	downloading?: boolean;
 }
 const Transcribing = ({ downloading }: props) => {
 	return (
@@ -9,11 +10,7 @@ const Transcribing = ({ downloading }: props) => {
 			<div className="flex flex-col gap-2 sm:gap-4"></div>
 			<h1 className="font-semibold text-4xl sm:text-5xxl md:text-6xl">Transcribing</h1>
 			<p>{!downloading ? "warming up cylinders" : "core cylinders engaged"}</p>
-			<div className="flex flex-col gap-2 sm:gap-4 max-w-[400px] mx-auto w-full">
-				{[0, 1, 2].map((val) => {
-					return <div key={val} className={"rounded-full h-2 sm:h-3 bg-slate-400 loading " + `loading${val}`}></div>;
-				})}
-			</div>
+			<Loader />
 		</div>
 	);
 };

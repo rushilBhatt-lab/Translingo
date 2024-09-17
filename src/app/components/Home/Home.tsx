@@ -16,7 +16,6 @@ const HomePage = ({ setFile, setAudioStream }: Props) => {
 
 	const StartRecording = async () => {
 		let tempStream;
-		console.log("Start Recording");
 		try {
 			const streamData = await navigator.mediaDevices.getUserMedia({
 				audio: true,
@@ -36,30 +35,31 @@ const HomePage = ({ setFile, setAudioStream }: Props) => {
 
 		const localAudioChunks: Blob[] = [];
 		mediaRecorder.current.ondataavailable = (event) => {
-			if (event.data.size > 0) {
-				localAudioChunks.push(event.data);
+			if (typeof event.data === "undefined") {
+				return;
 			}
+			if (event.data.size === 0) {
+				return;
+			}
+			localAudioChunks.push(event.data);
 		};
 		setAudioChunks(localAudioChunks);
 	};
+
 	const StopRecording = () => {
 		setRecordingStatus("inactive");
-		console.log("Stop Recording");
 
-		// Ensure mediaRecorder.current is not null before calling stop
 		if (mediaRecorder.current) {
 			mediaRecorder.current.stop();
 
 			mediaRecorder.current.onstop = () => {
-				if (mediaRecorder.current) {
-					const audioBlob = new Blob(audioChunks, { type: mimeType });
-					const audioFile = new File([audioBlob], "recorded-audio.webm", {
-						type: mimeType,
-					});
-					setAudioStream(audioFile);
-					setAudioChunks([]);
-					setDuration(0);
-				}
+				const audioBlob = new Blob(audioChunks, { type: mimeType });
+				const audioFile = new File([audioBlob], "recorded-audio.webm", {
+					type: mimeType,
+				});
+				setAudioStream(audioFile);
+				setAudioChunks([]);
+				setDuration(0);
 			};
 		} else {
 			console.error("mediaRecorder is null");
@@ -109,7 +109,7 @@ const HomePage = ({ setFile, setAudioStream }: Props) => {
 							}
 						}}
 					/>
-				</label>{" "}
+				</label>
 				a mp3 file
 			</p>
 		</main>

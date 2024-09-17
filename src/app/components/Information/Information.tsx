@@ -1,22 +1,26 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import Transcription from "../Transcription/Transcription";
 import Translation from "../Translation/Translation";
 import cn from "classnames";
+import { outputInterface, Tabs } from "@/interface/interface";
+import { toast } from "@/hooks/use-toast";
 
-// Define prop types
 interface Props {
-	output: any;
+	output: outputInterface[];
 	finished: boolean;
+	resetToHomePage: () => void;
 }
 
-const Information = ({ output, finished }: Props) => {
-	const [tab, setTab] = useState("transcription");
+const Information: React.FC<Props> = ({ output, finished, resetToHomePage }) => {
+	const worker = useRef<Worker | null>(null);
+	const [tab, setTab] = useState<Tabs>("transcription");
 	const [translation, setTranslation] = useState<string | null>(null);
 	const [toLanguage, setToLanguage] = useState<string>("Select language");
 	const [translating, setTranslating] = useState<boolean>(false);
 
-	const worker = useRef<Worker | null>(null);
+	const textElement = useMemo(() => {
+		return tab === "transcription" ? output.map((val) => val.text).join(" ") : translation || "";
+	}, [tab, output, translation]);
 
 	useEffect(() => {
 		if (!worker.current) {
@@ -28,18 +32,16 @@ const Information = ({ output, finished }: Props) => {
 		const onMessageReceived = (e: MessageEvent) => {
 			switch (e.data.status) {
 				case "initiate":
-					console.log("DOWNLOADING");
 					break;
 				case "progress":
-					console.log("LOADING");
 					break;
 				case "update":
 					setTranslation(e.data.output);
-					console.log(e.data.output);
 					break;
 				case "complete":
 					setTranslating(false);
-					console.log("DONE");
+					break;
+				default:
 					break;
 			}
 		};
@@ -49,40 +51,36 @@ const Information = ({ output, finished }: Props) => {
 		return () => worker.current?.removeEventListener("message", onMessageReceived);
 	}, []);
 
-	const textElement = tab === "transcription" ? output.map((val: any) => val.text).join(" ") : translation || "";
-
-	// Handle copying the transcribed/translated text
-	function handleCopy() {
-		navigator.clipboard.writeText(textElement);
-	}
-
-	// Handle downloading the transcribed/translated text as a file
-	function handleDownload() {
-		const element = document.createElement("a");
-		const file = new Blob([textElement], { type: "text/plain" });
-		element.href = URL.createObjectURL(file);
-		element.download = `Freescribe_${new Date().toString()}.txt`;
-		document.body.appendChild(element);
-		element.click();
-	}
-
-	// Trigger translation with the worker
-	function generateTranslation() {
-		if (translating || toLanguage === "Select language") {
-			return;
-		}
+	const generateTranslation = useCallback(() => {
+		if (translating || toLanguage === "Select language") return;
 
 		setTranslating(true);
 
 		worker.current?.postMessage({
-			text: output.map((val: any) => val.text),
+			text: output.map((val) => val.text),
 			src_lang: "eng_Latn",
 			tgt_lang: toLanguage,
 		});
-	}
+	}, [translating, toLanguage, output]);
+
+	const handleCopy = useCallback(() => {
+		navigator.clipboard.writeText(textElement);
+		toast({
+			description: "Text copied successfully!",
+		});
+	}, [textElement]);
+
+	const handleDownload = useCallback(() => {
+		const element = document.createElement("a");
+		const file = new Blob([textElement], { type: "text/plain" });
+		element.href = URL.createObjectURL(file);
+		element.download = `Translingo_${new Date().toString()}.txt`;
+		document.body.appendChild(element);
+		element.click();
+	}, [textElement]);
 
 	return (
-		<main className="flex-1 p-4 flex flex-col gap-3 text-center sm:gap-4 justify-center pb-20 max-w-prose w-full mx-auto sm:w-96">
+		<main className="flex-1 p-4 flex flex-col gap-3 text-center sm:gap-4 justify-center pb-20 max-w-prose w-full mx-auto">
 			<h1 className="font-semibold text-4xl sm:text-5xl md:text-6xl whitespace-nowrap">Your Transcription</h1>
 			<div className="grid grid-cols-2 items-center mx-auto bg-white shadow rounded-full overflow-hidden">
 				<button
@@ -104,19 +102,41 @@ const Information = ({ output, finished }: Props) => {
 					Translation
 				</button>
 			</div>
-			{tab === "transcription" ? (
-				<Transcription textElement={textElement} />
-			) : (
-				<Translation
-					toLanguage={toLanguage}
-					translating={translating}
-					textElement={textElement}
-					//setTranslating={setTranslating}
-					//setTranslation={setTranslation}
-					setToLanguage={setToLanguage}
-					generateTranslation={generateTranslation}
-				/>
-			)}
+			<div className="my-8 flex flex-col-reverse max-w-prose w-full mx-auto gap-4">
+				{(!finished || translating) && (
+					<div className="grid place-items-center">
+						<i className="fa-solid fa-spinner animate-spin"></i>
+					</div>
+				)}
+				{tab === "transcription" ? (
+					<Transcription textElement={textElement} />
+				) : (
+					<Translation
+						toLanguage={toLanguage}
+						translating={translating}
+						textElement={textElement}
+						setToLanguage={setToLanguage}
+						generateTranslation={generateTranslation}
+					/>
+				)}
+			</div>
+			<div className="flex items-center gap-4 mx-auto">
+				<button
+					onClick={handleCopy}
+					title="Copy"
+					className="bg-white hover:text-blue-500 duration-200 text-blue-300 px-2 aspect-square grid place-items-center rounded"
+				>
+					📝 ➡️ 📄📄
+				</button>
+				<button
+					onClick={handleDownload}
+					title="Download"
+					className="bg-white hover:text-blue-500 duration-200 text-blue-300 px-2 aspect-square grid place-items-center rounded"
+				>
+					⬇️
+				</button>
+				<button onClick={resetToHomePage}>↩️</button>
+			</div>
 		</main>
 	);
 };
