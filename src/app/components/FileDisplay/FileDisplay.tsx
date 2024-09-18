@@ -1,6 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import Icon from "@/app/Icon/Icon";
-import { faPenNib } from "@fortawesome/free-solid-svg-icons";
 
 interface props {
 	file: File | null;
