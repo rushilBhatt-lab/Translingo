@@ -5,7 +5,7 @@ import HomePage from "./components/Home/Home";
 import FileDisplay from "./components/FileDisplay/FileDisplay";
 import Transcribing from "./components/Transcribing/Transcribing";
 import Information from "./components/Information/Information";
-import { MessageTypes } from "@/utils/presets";
+import { MessageTypes, Models } from "@/utils/presets";
 import Link from "next/link";
 import { outputInterface } from "@/interface/interface";
 
@@ -80,7 +80,7 @@ export default function Home() {
 		}
 
 		if (audio) {
-			const modelName = `openai/whisper-tiny.en`;
+			const modelName = Models.WHISPER_TINY_EN;
 			worker.current?.postMessage({
 				type: MessageTypes.INFERENCE_REQUEST,
 				audio,

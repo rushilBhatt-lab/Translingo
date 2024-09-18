@@ -13,7 +13,7 @@ export const LoadingStatus = {
 	LOADING: "loading",
 };
 
-export const ModelNames = {
+export const Models = {
 	WHISPER_TINY_EN: "openai/whisper-tiny.en",
 	WHISPER_TINY: "openai/whisper-tiny",
 	WHISPER_BASE: "openai/whisper-base",

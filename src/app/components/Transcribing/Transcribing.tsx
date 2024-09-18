@@ -2,7 +2,7 @@ import React from "react";
 import Loader from "../Loader/Loader";
 
 interface props {
-	downloading?: boolean;
+	downloading: boolean;
 }
 const Transcribing = ({ downloading }: props) => {
 	return (

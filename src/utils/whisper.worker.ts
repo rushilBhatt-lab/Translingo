@@ -1,11 +1,9 @@
 import { pipeline, PipelineType } from "@xenova/transformers";
-import { MessageTypes } from "./presets";
-
-// import { pipeline, PipelineType } from "@xenova/transformers";
+import { MessageTypes, Models } from "./presets";
 
 class MyTranscriptionPipeline {
 	static task: PipelineType = "automatic-speech-recognition";
-	static model = "openai/whisper-tiny.en";
+	static model = Models.WHISPER_TINY_EN;
 	static instance: any = null;
 
 	static async getInstance(progress_callback: ((data: any) => void) | null = null): Promise<any> {
