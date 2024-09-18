@@ -116,12 +116,12 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col max-w-[1000px] mx-auto w-full items-center justify-center">
-			<section className="min-h-[47rem] flex flex-col">
+			<section className="min-h-[45rem] flex flex-col">
 				<Header />
 				{renderContent()}
 			</section>
 			<footer className="text-center pb-10">
-				Built with ❤️ by
+				<p>Built with ❤️ by</p>
 				<Link href="https://rushilbhatt.com/" className="underline" target="_blank">
 					Rushil
 				</Link>

@@ -1,25 +1,32 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+import { Open_Sans, Poppins } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Toaster } from "sonner";
+import "./globals.css";
 config.autoAddCss = false;
 
-const geistSans = localFont({
-	src: "./fonts/GeistVF.woff",
-	variable: "--font-geist-sans",
-	weight: "100 900",
+const openSans = Open_Sans({
+	weight: ["300", "400", "500", "600"],
+	subsets: ["latin"],
+	display: "swap",
 });
-const geistMono = localFont({
-	src: "./fonts/GeistMonoVF.woff",
-	variable: "--font-geist-mono",
-	weight: "100 900",
+
+const poppins = Poppins({
+	weight: ["100", "200", "300", "400", "500", "600", "700"],
+	subsets: ["latin"],
+	display: "swap",
 });
 
 export const metadata: Metadata = {
 	title: "Tanslingo",
 	description: "Record,Transcribe,Translate",
+	icons: [
+		{
+			url: "/favicon.ico",
+			href: "/favicon.ico",
+		},
+	],
 };
 
 export default function RootLayout({
@@ -29,7 +36,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+			<body className={`${openSans.className} ${poppins.className} antialiased`}>
 				<Toaster />
 				{children}
 			</body>

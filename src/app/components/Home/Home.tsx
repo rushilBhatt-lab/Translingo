@@ -97,7 +97,7 @@ const HomePage = ({ setFile, setAudioStream }: Props) => {
 			<p>
 				Or
 				<label className="cursor-pointer font-bold">
-					Upload
+					<span> Upload </span>
 					<input
 						className="hidden"
 						type="file"
