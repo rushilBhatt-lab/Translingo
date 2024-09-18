@@ -28,3 +28,29 @@ export interface progressData {
 }
 
 export type Tabs = "transcription" | "translation";
+
+export interface TranscriptionProgressData {
+	file: string;
+	progress: number;
+	loaded: number;
+	total: number;
+}
+
+export interface ModelCallbackData {
+	status: string;
+	file?: string;
+	progress?: number;
+	loaded?: number;
+	total?: number;
+}
+
+export interface GenerationTrackerResult {
+	text: string;
+	start: number;
+	end: any;
+}
+
+export interface TranscriptionChunk {
+	text: string;
+	timestamp: [number, number];
+}
