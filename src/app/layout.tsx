@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 config.autoAddCss = false;
 
 const geistSans = localFont({

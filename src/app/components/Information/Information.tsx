@@ -3,7 +3,7 @@ import Transcription from "../Transcription/Transcription";
 import Translation from "../Translation/Translation";
 import cn from "classnames";
 import { outputInterface, Tabs } from "@/interface/interface";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface Props {
 	output: outputInterface[];
@@ -64,19 +64,26 @@ const Information: React.FC<Props> = ({ output, finished, resetToHomePage }) => 
 	}, [translating, toLanguage, output]);
 
 	const handleCopy = useCallback(() => {
-		navigator.clipboard.writeText(textElement);
-		toast({
-			description: "Text copied successfully!",
-		});
+		try {
+			navigator.clipboard.writeText(textElement);
+			toast.success("Copied successfully!");
+		} catch (error) {
+			toast.error("Failed to copy text. Please try again.");
+		}
 	}, [textElement]);
 
 	const handleDownload = useCallback(() => {
-		const element = document.createElement("a");
-		const file = new Blob([textElement], { type: "text/plain" });
-		element.href = URL.createObjectURL(file);
-		element.download = `Translingo_${new Date().toString()}.txt`;
-		document.body.appendChild(element);
-		element.click();
+		try {
+			const element = document.createElement("a");
+			const file = new Blob([textElement], { type: "text/plain" });
+			element.href = URL.createObjectURL(file);
+			element.download = `Translingo_${new Date().toString()}.txt`;
+			document.body.appendChild(element);
+			element.click();
+			toast.success("Download successful!");
+		} catch (error) {
+			toast.error("Failed to download the file. Please try again.");
+		}
 	}, [textElement]);
 
 	return (
